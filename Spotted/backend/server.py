@@ -117,16 +117,14 @@ def chain_genesis(chain : str):
     result = send_freechain_cmd(f"{PRE} chain {chain} genesis", payload=None)
     return jsonify(result)
 
-@API.route('/freechains/chain/heads/<string:chain>', defaults={'mod': ""})
 @API.route('/freechains/chain/heads/<string:chain>/<string:mod>')
-def chain_heads(chain : str, mod: str = ""):
+def chain_heads(chain : str, mod: str):
     global PRE
     result = send_freechain_cmd(f"{PRE} chain {chain} heads {mod}", payload=None)
     return jsonify(result)
 
-@API.route('/freechains/chain/get/<string:chain>/<string:hash>', defaults={'mod': ""})
 @API.route('/freechains/chain/get/<string:chain>/<string:hash>/<string:mod>')
-def chain_get(chain : str, hash: str, mod: str = ""):
+def chain_get(chain : str, hash: str, mod: str):
     content = request.get_json(silent=True)
     decript = "" if 'decript' not in content else content['decript']
     global PRE

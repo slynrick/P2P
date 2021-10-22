@@ -40,13 +40,9 @@ def send_to_socket(cmd: str, payload: Optional[str], read_more=False) -> Tuple[b
 
 
 
-API = Flask(__name__)
-MAJOR    = 0
-MINOR    = 8
-REVISION = 6
-VERSION  = f"v{MAJOR}.{MINOR}.{REVISION}"
-PRE      = f"FC {VERSION}"
 """
+Freechains CLI commands:
+
     freechains chains join  <chain> [<shared>]
     freechains chains leave <chain>
     freechains chains list
@@ -77,18 +73,25 @@ PRE      = f"FC {VERSION}"
         --decrypt=<pvt>     [get]             decrypts post with private key (only in public identity chains)
         --why=<text>        [(dis)like]       explains reason for the like
 """
+
+API = Flask(__name__)
+MAJOR    = 0
+MINOR    = 8
+REVISION = 6
+VERSION  = f"v{MAJOR}.{MINOR}.{REVISION}"
+PRE      = f"FC {VERSION}"
+
 def send_freechain_cmd(cmd: str, payload: Optional[str] = None, read_more=False) -> Dict[str, Union[Optional[str], bool]]:
     result = {}
     ok, response = send_to_socket(cmd, payload, read_more)
-    print(ok, "res: ", response)
-    result['status'] = ok
-    result['message'] = "result returned" if ok else response
-    result['data'] = response if ok else None
+    result["status"] = ok
+    result["message"] = "result returned" if ok else response
+    result["data"] = response if ok else None
     return result
 
-"""
-CHAINS
-"""
+
+###################################################################
+# CHAINS CMD
 @API.route('/freechains/chains/join/<string:chain>')
 def chains_join(chain : str):
     content = request.get_json(silent=True)
@@ -103,14 +106,15 @@ def chains_leave(chain : str):
     result = send_freechain_cmd(f"{PRE} chains leave {chain}", payload=None)
     return jsonify(result)
 
-@API.route('/freechains/chains/list/')
+@API.route('/freechains/chains/list')
 def chains_list():
     global PRE
     result = send_freechain_cmd(f"{PRE} chains list", payload=None)
     return jsonify(result)
-"""
-CHAIN
-"""
+
+
+###################################################################
+# CHAIN CMD
 @API.route('/freechains/chain/genesis/<string:chain>')
 def chain_genesis(chain : str):
     global PRE
@@ -126,6 +130,7 @@ def chain_heads(chain : str, mod: str):
 @API.route('/freechains/chain/get/<string:chain>/<string:hash>/<string:mod>')
 def chain_get(chain : str, hash: str, mod: str):
     content = request.get_json(silent=True)
+    content = content if content else {}
     decript = "" if 'decript' not in content else content['decript']
     global PRE
     result = send_freechain_cmd(f"{PRE} chain {chain} get {mod} {hash} {decript}", payload=None, read_more=True)
@@ -134,6 +139,7 @@ def chain_get(chain : str, hash: str, mod: str):
 @API.route('/freechains/chain/post/<string:chain>')
 def chain_post(chain : str):
     content = request.get_json(silent=True)
+    content = content if content else {}
     encrypt = "" if 'encrypt' not in content else content['encrypt']
     sign = "anon" if 'sign' not in content else content['sign']
     payload = "" if 'payload' not in content else content['payload']
@@ -181,16 +187,17 @@ def chain_traverse(chain: str):
     global PRE
     result = send_freechain_cmd(f"{PRE} chain {chain} traverse {' '.join(hashes)}", payload=None)
     return jsonify(result)
-"""
-PEER
-"""
-@API.route('/freechains/peer/<string:remote>/ping')
+
+
+###################################################################
+# PEER CMD
+@API.route('/freechains/peer/ping/<string:remote>')
 def peer_ping(remote : str):
     global PRE
     result = send_freechain_cmd(f"{PRE} peer {remote} ping", payload=None)
     return jsonify(result)
 
-@API.route('/freechains/peer/<string:remote>/chains')
+@API.route('/freechains/peer/chains/<string:remote>')
 def peer_chains(remote : str):
     global PRE
     result = send_freechain_cmd(f"{PRE} peer {remote} chains", payload=None)
@@ -207,27 +214,56 @@ def peer_recv(remote : str, chain: str):
     global PRE
     result = send_freechain_cmd(f"{PRE} peer {remote} recv {chain}", payload=None)
     return jsonify(result)
-"""
-CRYPTO
-"""
-@API.route('/freechains/crypto')
-def crypto():
+
+
+###################################################################
+# CRYPTO CMD
+@API.route('/freechains/crypto/<string:mod>')
+def crypto(mod: str):
     content = request.get_json(silent=True)
-    mod = "" if 'mod' not in content else content['mod']
     passphrase = "" if 'passphrase' not in content else content['passphrase']
     if "\n" in passphrase:
         return "passfrase with new line"
     global PRE
     result = send_freechain_cmd(f"{PRE} crypto {mod}", payload=passphrase)
     return jsonify(result)
-"""
-HOST
-"""
+
+
+###################################################################
+# HOST CMD
 @API.route('/freechains/host/now/<string:time>')
 def host_now(time : str):
     global PRE
     result = send_freechain_cmd(f"{PRE} host now {time}", payload=None)
     return jsonify(result)
 
-print(f"API Server Up!")
-API.run(host='0.0.0.0')
+
+###################################################################
+# CUSTOM ROUTE
+@API.route('/freechains/custom/get/payloads/<string:chain>/<string:start>/<string:end>')
+def custom_get(chain: str, start: str, end: str):
+    content = request.get_json(silent=True)
+    content = content if content else {}
+    decript = "" if 'decript' not in content else content['decript']
+    global PRE
+    chains = send_freechain_cmd(f"{PRE} chain {chain} traverse {' '.join([start, end])}", payload=None)
+    payloads = []
+    ok = True & chains['status']
+    if ok:
+        for block in chains['data']:
+            payload = send_freechain_cmd(f"{PRE} chain {chain} get payload {block} {decript}", payload=None, read_more=True)
+            ok = ok & payload["status"]
+            if ok:
+                payloads.append({"block": block, "payload": payload["data"]})
+    return jsonify({
+        "status": ok,
+        "message": "result returned" if ok else "Error getting payloads",
+        "data": payloads if ok else None
+    })
+    
+    
+
+
+###################################################################
+# Run API
+API.run(host='0.0.0.0', port=5000)

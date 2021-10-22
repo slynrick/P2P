@@ -1,5 +1,7 @@
 # Spotted
 
+![spotted](resources/logo2.png)
+
 Todo o trabalho prático pode ser encontrado nos sequintes links:
  - [Funcionamento do backend](backend/README.md)
  - [Funcionamento do frontend](frontend/README.md)

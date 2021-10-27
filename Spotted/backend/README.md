@@ -59,7 +59,7 @@ O servidor é levantado no localhost porta 5000, única porta que é exposta de 
 | /freechains/chains/join/leave/`chain` | `chain`: Nome da cadeia URL encoded |  | Rota para sair em uma nova cadeia|
 | /freechains/chains/list | | | Rota para listar as cadeias locais|
 | /freechains/chain/genesis/`chain` | `chain`: Nome da cadeia URL encoded |  | Rota para identificar o hash do bloco genesis|
-| /freechains/chain/get/`chain`/`hash`/`mod` | `chain`: Nome da cadeia URL encoded<br> `hash`:  Hash do bloco <br> `mod`: all ou linked ou blocked | {<br>`"decript"`: "XXXXX..."<br>} | Rota para pegar os dados de um bloco em uma cadeia|
+| /freechains/chain/get/`chain`/`mod`/`hash` | `chain`: Nome da cadeia URL encoded<br> `hash`:  Hash do bloco <br> `mod`: all ou linked ou blocked | {<br>`"decript"`: "XXXXX..."<br>} | Rota para pegar os dados de um bloco em uma cadeia|
 | /freechains/chain/post/`chain` | `chain`: Nome da cadeia URL encoded | {<br>`"encrypt"`: "XXXXX...",<br>`"sign"`: "XXXXX...",<br>`"payload"`: "Olá!"<br>} | Rota para escrever na cadeia|
 | /freechains/chain/like/`chain`/`hash` | `chain`: Nome da cadeia URL encoded<br>`hash`: Hash do bloco | {<br>`"sign"`: "XXXXX...",<br>`"why"`: "Legal!"<br>} | Rota para dar like em um bloco da cadeia|
 | /freechains/chain/dislike/`chain`/`hash` | `chain`: Nome da cadeia URL encoded<br>`hash`: Hash do bloco | {<br>`"sign"`: "XXXXX...",<br>`"why"`: "Falta de educação!"<br>} | Rota para deslike em um bloco da rede|
@@ -73,6 +73,23 @@ O servidor é levantado no localhost porta 5000, única porta que é exposta de 
 | /freechains/crypto/`mod` | `mod`: shared ou pubpvt | {<br>`"passphrase"`: "Senha muito forte!"<br>} | Rota para buscar a cadeia de blocos entre o primeiro e o segundo hash. O segundo hash é opcional|
 | /freechains/host/now/`time` | `time`: Tempo para o nó | | Rota para mudar o tempo do nó|
 |/freechains/custom/get/payloads/`chain`/`start`/`end` | `chain`: Nome da cadeia URL encoded<br> `start`:  Hash do bloco inicial <br> `end`: Hash do bloco final | {<br>`"decript"`: "XXXXX..."<br>} | Rota para pegar os dados de payload de todos os blocos entre o inicial e final, com eles inclusos|
+
+
+A resposta da API possui o seguinte formato:
+```json
+{
+    "data": "Hello!",
+    "message": "result returned",
+    "status": true
+}
+```
+Sempre possui as chaves `data`, `message` e `status`.
+
+Quando um dado é retornado, o resultado pode ser encontrado em `data` e o `status` será true.
+
+Caso dê algum erro, o `data` ficará vazio, o `message` indicará o erro e o `status` será false.
+
+
 
 ## Utilização
 

@@ -3,6 +3,7 @@ import argparse
 import socket
 from typing import Dict, List, Optional, Tuple, Union
 from flask import Flask, request, jsonify
+import json
 
 parser = argparse.ArgumentParser(description='Freechains API server')
 parser.add_argument("--host", dest="host", type=str, help="Hostname of freechains", default='localhost')
@@ -34,8 +35,15 @@ def send_to_socket(cmd: str, payload: Optional[str], read_more=False) -> Tuple[b
             break
         else:
             response += char.decode('utf-8')
-    if len(response) > 0 and response[0] != '!' and read_more:
-        response = sckt.recv(int(response)).decode('utf-8')
+    if response.isnumeric() and read_more:
+        response2 = ""
+        for _ in range(int(response)):
+            response2 += sckt.recv(1).decode('utf-8')
+        try:
+            response = json.loads(response2)
+        except:
+           response = response2
+        
     return True, response
 
 
@@ -83,6 +91,7 @@ PRE      = f"FC {VERSION}"
 
 def send_freechain_cmd(cmd: str, payload: Optional[str] = None, read_more=False) -> Dict[str, Union[Optional[str], bool]]:
     result = {}
+    print(cmd)
     ok, response = send_to_socket(cmd, payload, read_more)
     result["status"] = ok
     result["message"] = "result returned" if ok else response
@@ -124,11 +133,11 @@ def chain_genesis(chain : str):
 @API.route('/freechains/chain/heads/<string:chain>/<string:mod>')
 def chain_heads(chain : str, mod: str):
     global PRE
-    result = send_freechain_cmd(f"{PRE} chain {chain} heads {mod}", payload=None)
+    result = send_freechain_cmd(f"{PRE} chain {chain} heads{' blocked' if mod =='blocked' else ''}", payload=None)
     return jsonify(result)
 
-@API.route('/freechains/chain/get/<string:chain>/<string:hash>/<string:mod>')
-def chain_get(chain : str, hash: str, mod: str):
+@API.route('/freechains/chain/get/<string:chain>/<string:mod>/<string:hash>')
+def chain_get(chain : str, mod: str, hash: str):
     content = request.get_json(silent=True)
     content = content if content else {}
     decript = "" if 'decript' not in content else content['decript']

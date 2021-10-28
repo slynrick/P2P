@@ -13,7 +13,7 @@ RUN apt update && apt install -y \
 RUN pip3 install flask
 
 WORKDIR /freechains
-RUN wget https://github.com/Freechains/README/releases/download/v0.8.6/install-v0.8.6.sh && sh install-v0.8.6.sh .
+RUN wget https://github.com/Freechains/README/releases/download/v0.9.0/install-v0.9.0.sh && sh install-v0.9.0.sh .
 ENV PATH="/freechains:${PATH}"
 
 COPY server.py /freechains/server.py

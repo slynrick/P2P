@@ -189,12 +189,10 @@ def chain_remove(chain : str, hash: str):
     result = send_freechain_cmd(f"{PRE} chain {chain} remove  {hash}", payload=None)
     return jsonify(result)
 
-@API.route('/freechains/chain/traverse/<string:chain>')
-def chain_traverse(chain: str):
-    content = request.get_json(silent=True)
-    hashes = [] if 'hashes' not in content else content['hashes']
+@API.route('/freechains/chain/consensus/<string:chain>')
+def chain_consensus(chain: str):
     global PRE
-    result = send_freechain_cmd(f"{PRE} chain {chain} traverse {' '.join(hashes)}", payload=None)
+    result = send_freechain_cmd(f"{PRE} chain {chain} consensus", payload=None)
     return jsonify(result)
 
 
@@ -249,13 +247,13 @@ def host_now(time : str):
 
 ###################################################################
 # CUSTOM ROUTE
-@API.route('/freechains/custom/get/payloads/<string:chain>/<string:start>/<string:end>')
-def custom_get(chain: str, start: str, end: str):
+@API.route('/freechains/custom/get/payloads/<string:chain>')
+def custom_get(chain: str):
     content = request.get_json(silent=True)
     content = content if content else {}
     decript = "" if 'decript' not in content else content['decript']
     global PRE
-    chains = send_freechain_cmd(f"{PRE} chain {chain} traverse {' '.join([start, end])}", payload=None)
+    chains = send_freechain_cmd(f"{PRE} chain {chain} consensus", payload=None)
     payloads = []
     ok = True & chains['status']
     if ok:

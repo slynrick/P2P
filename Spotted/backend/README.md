@@ -20,7 +20,7 @@ freechains chain <chain> post (file | inline | -) [<path_or_text>]
 freechains chain <chain> (like | dislike) <hash>
 freechains chain <chain> reps <hash_or_pub>
 freechains chain <chain> remove <hash>
-freechains chain <chain> traverse (all | linked) <hashes>...
+freechains chain <name> consensus
 freechains chain <chain> listen
 
 freechains peer <addr:port> ping
@@ -65,14 +65,14 @@ O servidor é levantado no localhost porta 5000, única porta que é exposta de 
 | /freechains/chain/dislike/`chain`/`hash` | `chain`: Nome da cadeia URL encoded<br>`hash`: Hash do bloco | {<br>`"sign"`: "XXXXX...",<br>`"why"`: "Falta de educação!"<br>} | Rota para deslike em um bloco da rede|
 | /freechains/chain/reps/`chain`/`hash_or_pub` | `chain`: Nome da cadeia URL encoded<br>`hash_or_pub`: Hash de um bloco ou chave publica de um usuário |  | Rota para identificar a repoutação em uma cadeia|
 | /freechains/chain/remove/`chain`/`hash` | `chain`: Nome da cadeia URL encoded<br> `hash`:  Hash do bloco | | Rota para retirar um bloco da cadeia|
-| /freechains/chain/traverse/`chain` | `chain`: Nome da cadeia URL encoded | {<br>`"hashes"`: ["XXXXX...", "YXXXX..."]<br>} | Rota para buscar a cadeia de blocos entre o primeiro e o segundo hash. O segundo hash é opcional|
+| /freechains/chain/consensus/`chain` | `chain`: Nome da cadeia URL encoded | | Rota para buscar a cadeia de blocosdesde o genesis|
 | /freechains/peer/ping/`remote` | `remote`: Endereço remoto no formato addr:port |  | Rota para verificar conectividade com o peer remoto|
 | /freechains/peer/chains/`remote` | `remote`: Endereço remoto no formato addr:port |  | Rota para listar as cadeias remotas|
 | /freechains/peer/send/`remote`/`chain` | `remote`: Endereço remoto no formato addr:port<br>`chain`: Nome da cadeia URL encoded |  | Rota para enviar dados da cadeia para remoto|
 | /freechains/peer/recv/`remote`/`chain` | `remote`: Endereço remoto no formato addr:port<br>`chain`: Nome da cadeia URL encoded |  | Rota para receber dados da cadeia para remoto|
 | /freechains/crypto/`mod` | `mod`: shared ou pubpvt | {<br>`"passphrase"`: "Senha muito forte!"<br>} | Rota para buscar a cadeia de blocos entre o primeiro e o segundo hash. O segundo hash é opcional|
 | /freechains/host/now/`time` | `time`: Tempo para o nó | | Rota para mudar o tempo do nó|
-|/freechains/custom/get/payloads/`chain`/`start`/`end` | `chain`: Nome da cadeia URL encoded<br> `start`:  Hash do bloco inicial <br> `end`: Hash do bloco final | {<br>`"decript"`: "XXXXX..."<br>} | Rota para pegar os dados de payload de todos os blocos entre o inicial e final, com eles inclusos|
+|/freechains/custom/get/payloads/`chain` | `chain`: Nome da cadeia URL encoded |  | Rota para pegar os dados de payload de todos os blocos desde o genesis|
 
 
 A resposta da API possui o seguinte formato:

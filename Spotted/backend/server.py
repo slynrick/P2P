@@ -84,8 +84,8 @@ Freechains CLI commands:
 
 API = Flask(__name__)
 MAJOR    = 0
-MINOR    = 8
-REVISION = 6
+MINOR    = 9
+REVISION = 0
 VERSION  = f"v{MAJOR}.{MINOR}.{REVISION}"
 PRE      = f"FC {VERSION}"
 

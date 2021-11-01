@@ -20,7 +20,7 @@ Todo o trabalho prático pode ser encontrado nos sequintes links:
  - [Descrição da aplicação](Spotted/README.md)
  - [Funcionamento do backend](Spotted/backend/README.md)
  - [Funcionamento do frontend](Spotted/frontend/README.md)
- - [Simulação do freechains em cima do Spotted](Spotted/simu/README.md)
+ - [Simulação do freechains em cima do Spotted](Spotted/simulation/README.md)
 
 
 # License

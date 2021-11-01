@@ -1,6 +1,6 @@
 # P2P: Freechains Docker
 
-O Freechains é u m protocolo peer-to-peer(P2P) pubsub não permissionado de disseminação de conteúdo e todo seu protocolo, bem como sua utilização pode ser encontrado na sua página do [GitHub](https://github.com/Freechains/README)
+O Freechains é um protocolo peer-to-peer(P2P) pubsub não permissionado de disseminação de conteúdo e todo seu protocolo, bem como sua utilização pode ser encontrado na sua página do [GitHub](https://github.com/Freechains/README)
 
 Docker pode ser descrito através da tradução de um texto encontrado no site oficial:
 > Docker é uma plataforma aberta para desenvolvimento, envio e execução de aplicativos. O Docker permite que você separe seus aplicativos de sua infraestrutura para que possa entregar o software rapidamente. Com o Docker, você pode gerenciar sua infraestrutura da mesma forma que gerencia seus aplicativos. Tirando proveito das metodologias do Docker para envio, teste e implantação de código rapidamente, você pode reduzir significativamente o atraso entre escrever o código e executá-lo na produção.

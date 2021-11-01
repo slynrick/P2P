@@ -21,3 +21,8 @@ Todo o trabalho prático pode ser encontrado nos sequintes links:
  - [Funcionamento do backend](Spotted/backend/README.md)
  - [Funcionamento do frontend](Spotted/frontend/README.md)
  - [Simulação do freechains em cima do Spotted](Spotted/simu/README.md)
+
+
+# License
+
+MIT License

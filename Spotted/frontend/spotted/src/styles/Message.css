@@ -1,0 +1,12 @@
+.Message {
+    background-color: #323741 !important;
+}
+
+.MessageText {
+    color: white !important;
+}
+
+.counter {
+    color: white !important;
+    font-size: x-small;
+}

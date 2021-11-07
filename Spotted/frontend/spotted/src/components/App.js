@@ -1,6 +1,7 @@
 import '../styles/App.css';
 import React from 'react'
-import ButtonAppBar from './navbar'
+import AppBar from './Navbar'
+import AppChat from './Chat'
 
 
 
@@ -8,21 +9,50 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     // Não chame this.setState() aqui!
-    this.state = {chains:['teste']};
+    this.state = {chains:[], selectedChain: ""};
+
+    this.addChain = this.addChain.bind(this);
+    this.selectChain = this.selectChain.bind(this);
+    this.getAllChains = this.getAllChains.bind(this);
+  }
+
+  addChain(chainName, pubKey) {
+    fetch('/freechains/chains/join/%23' + chainName, {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      method: "GET",
+      body: JSON.stringify({shared: pubKey})
+    }).then(response => response.json())
+      .then(json => {
+        this.setState({ selectedChain: "#" + chainName });
+      });
+
+      this.getAllChains();
+  }
+
+  selectChain(chainName) {
+    this.setState({ selectedChain: chainName });
+  }
+
+  getAllChains() {
+    fetch('/freechains/chains/list')
+      .then(response => response.json())
+      .then(json => {
+        var chains = json["data"].split(' ');
+        this.setState({ chains: chains });
+    });
   }
   
   componentDidMount() {
-    fetch('http://localhost:5000/freechains/chains/list')
-      .then(response => response.json())
-      .then(json => {
-        console.log(json)
-        //this.setState({ chains: json["data"] });
-      });
+    this.getAllChains();
   }
   render() {
     return (
       <div className="App">
-        <ButtonAppBar chains={this.state.chains}/>
+        <AppBar chains={this.state.chains} addChain={this.addChain} selectChain={this.selectChain}/>
+        <AppChat chain={this.state.selectedChain}/>
       </div>
     );
   }

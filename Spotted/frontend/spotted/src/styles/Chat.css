@@ -1,0 +1,18 @@
+.Chat {
+    margin-top: 83px;
+    height: 85vh !important;
+    padding: 0;
+}
+
+.text-chat {
+    min-height: 88% !important;
+    max-height: 88% !important;
+    overflow: auto;
+    display: flex;
+    margin-bottom: 20px !important;
+}
+
+.send-chat {
+    min-width: 90% !important;
+    background-color: #323741 !important;
+}

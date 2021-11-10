@@ -8,6 +8,11 @@ import AttIcon from '@material-ui/icons/AttachFileRounded';
 import { withStyles } from "@material-ui/core/styles";
 import Messages from './Messages'
 
+import BottomNavigation from '@mui/material/BottomNavigation';
+import BottomNavigationAction from '@mui/material/BottomNavigationAction';
+import ChatIcon from '@material-ui/icons/ChatRounded';
+import BlockedIcon from '@material-ui/icons/BlockRounded';
+
 const styles = {
     input: {
       color: "white"
@@ -26,7 +31,7 @@ class Chat extends React.Component {
     return (
       <div className="Chat">
         <div className="text-chat">
-            <Messages chain={this.props.chain}/>
+            <Messages chain={this.props.chain} selectedMode={this.props.selectedMode}/>
         </div>
         <TextField
           className="send-chat"
@@ -61,6 +66,22 @@ class Chat extends React.Component {
              )
           }}
         />
+        <BottomNavigation className="bottom-toolbar" showLabels
+            value={this.props.selectedMode}
+            onChange={(event, newValue) => {
+            this.props.selectMode(newValue);
+        }}>
+            <BottomNavigationAction style={{ color: 'white' }}
+                label="Messages"
+                value="Messages"
+                icon={<ChatIcon style={{ color: 'white' }}/>}
+            />
+            <BottomNavigationAction style={{ color: 'white' }}
+                label="Blocked"
+                value="Blocked"
+                icon={<BlockedIcon style={{ color: 'white' }}/>}
+            />
+        </BottomNavigation>
       </div>
     );
   }

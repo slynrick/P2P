@@ -109,7 +109,7 @@ export default function NavBar(props) {
           {['Criar Cadeia'].map((text, index) => (
             <ListItem button key={text}>
               <ListItemIcon>
-                <AddIcon />
+                <AddIcon style={{ color: 'white' }}/>
               </ListItemIcon>
               <ListItemText primary={text} />
             </ListItem>
@@ -122,7 +122,7 @@ export default function NavBar(props) {
               selected={selectedIndex === index}
               onClick={(event) => { handleListItemClick(event, index); props.selectChain(text); }}>
               <ListItemIcon>
-                <ChainIcon />
+                <ChainIcon style={{ color: 'white' }}/>
               </ListItemIcon>
               <ListItemText primary={text} />
             </ListItem>

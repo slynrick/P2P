@@ -1,12 +1,12 @@
 .Chat {
     margin-top: 83px;
-    height: 85vh !important;
+    height: 91.2vh !important;
     padding: 0;
 }
 
 .text-chat {
-    min-height: 88% !important;
-    max-height: 88% !important;
+    min-height: 70vh !important;
+    max-height: 70vh !important;
     overflow: auto;
     display: flex;
     margin-bottom: 20px !important;
@@ -15,4 +15,8 @@
 .send-chat {
     min-width: 90% !important;
     background-color: #323741 !important;
+}
+
+.bottom-toolbar {
+    background-color: #282c34  !important;
 }

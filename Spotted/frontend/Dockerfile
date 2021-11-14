@@ -1,9 +1,6 @@
-FROM ubuntu:18.04
+FROM spotted-backend
 
-ENV TZ=America/Sao_Paulo
-RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 RUN apt update && apt install -y \
-    git \
     curl
 RUN curl -fsSL https://deb.nodesource.com/setup_lts.x | bash - && \
     apt-get install -y nodejs && \
@@ -18,5 +15,5 @@ WORKDIR /spotted
 
 EXPOSE 8080
 
-CMD sleep infinity
-#CMD start.sh
+# CMD sleep infinity
+CMD /freechains/start.sh

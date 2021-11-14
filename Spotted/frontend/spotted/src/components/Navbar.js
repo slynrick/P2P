@@ -106,7 +106,7 @@ export default function NavBar(props) {
         </DrawerHeader>
         <Divider />
         <List>
-          {['Criar Cadeia'].map((text, index) => (
+          {['Join a chain'].map((text, index) => (
             <ListItem button key={text}>
               <ListItemIcon>
                 <AddIcon style={{ color: 'white' }}/>

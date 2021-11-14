@@ -5,8 +5,8 @@
 }
 
 .text-chat {
-    min-height: 70vh !important;
-    max-height: 70vh !important;
+    min-height: 53vh !important;
+    max-height: 53vh !important;
     overflow: auto;
     display: flex;
     margin-bottom: 20px !important;
@@ -19,4 +19,20 @@
 
 .bottom-toolbar {
     background-color: #282c34  !important;
+}
+
+.conf-chat {
+    min-width: 90% !important;
+}
+
+.pubpvt-key {
+    min-width: 40% !important;
+    margin-right: 20px !important;
+    margin-bottom: 20px !important;
+}
+
+.remote-address {
+    min-width: 82% !important;
+    margin-right: 20px !important;
+    margin-bottom: 20px !important;
 }

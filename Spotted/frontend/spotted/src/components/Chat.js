@@ -25,12 +25,31 @@ const styles = {
 class Chat extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {pubKey:"", pvtKey: "", remoteAddress: ""};
+    this.state = {remoteAddress: ""};
 
+    this.syncChain = this.syncChain.bind(this);
     this.generateKeys = this.generateKeys.bind(this);
+    this.handlePvtKeyChange = this.handlePvtKeyChange.bind(this);
+    this.handlePubKeyChange = this.handlePubKeyChange.bind(this);
+  }
+
+  syncChain() {
+    if (this.state.remoteAddress === "")
+      return;
+    fetch('/freechains/peer/recv/' +  this.state.remoteAddress + '/%23' + this.props.chain)
+      .then(response => response.json())
+      .then(json_recv => {
+        console.log(json_recv);
+        fetch('/freechains/peer/send/' +  this.state.remoteAddress + '/%23' + this.props.chain)
+          .then(response => response.json())
+          .then(json_send => {
+            console.log(json_send);
+        });
+    });
   }
 
   generateKeys() {
+    console.log("keys");
     var crypto = require("crypto");
     var id = crypto.randomBytes(32).toString('hex');
     fetch('/freechains/crypto/pubpvt', {
@@ -38,13 +57,24 @@ class Chat extends React.Component {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
+      method: 'POST',
       body: JSON.stringify({"passphrase": id})
     }).then(response => response.json())
       .then(json => {
-        console.log(json);
-        // this.setState({ selectedChain: "#" + chainName });
+        var keys = json['data'].split(" ");
+        console.log(keys);
+        this.props.handlePubKeyChange(keys[0]);
+        this.props.handlePvtKeyChange(keys[1]);
       });
   }
+
+  handlePvtKeyChange = (event) => {
+    this.props.handlePvtKeyChange(event.target.value);
+  };
+
+  handlePubKeyChange = (event) => {
+    this.props.handlePubKeyChange(event.target.value);
+  };
 
   render() {
     const { classes } = this.props;
@@ -54,8 +84,30 @@ class Chat extends React.Component {
             <Messages chain={this.props.chain} selectedMode={this.props.selectedMode}/>
         </div>
         <div className="conf-chat">
-          <TextField className="pubpvt-key" id="standard-basic1" label="PublicKey"  variant="filled" InputLabelProps={{style : {color : 'white', left:0} }}/>
-          <TextField className="pubpvt-key" id="standard-basic2" label="PrivateKey" variant="filled" InputLabelProps={{style : {color : 'white'} }}/>
+          <TextField 
+            className="pubpvt-key" 
+            id="standard-basic1" 
+            label="PublicKey"  
+            variant="filled" 
+            value={this.props.currentUser.pubKey} 
+            onChange={this.handlePubKeyChange}
+            InputLabelProps={{style : {color : 'white', left:0} }}
+            InputProps={{
+            className: classes.input
+            }}
+          />
+          <TextField 
+            className="pubpvt-key" 
+            id="standard-basic2" 
+            label="PrivateKey" 
+            variant="filled" 
+            value={this.props.currentUser.pvtKey} 
+            onChange={this.handlePvtKeyChange}
+            InputLabelProps={{style : {color : 'white'} }}
+            InputProps={{
+            className: classes.input
+            }}
+          />
           <IconButton
             onClick={this.generateKeys}
           >
@@ -63,9 +115,14 @@ class Chat extends React.Component {
           </IconButton>
         </div>
         <div className="conf-chat">
-          <TextField className="remote-address" id="standard-basic3" label="Remote"     variant="filled" InputLabelProps={{style : {color : 'white'} }}/>
+          <TextField 
+            className="remote-address" 
+            id="standard-basic3" 
+            label="Remote"     
+            variant="filled" 
+            InputLabelProps={{style : {color : 'white'} }}/>
           <IconButton
-            //onClick={handleClickShowPassword}
+            onClick={this.syncChain}
           >
             <UpdateIcon style={{ color: 'white' }}/>
           </IconButton>

@@ -29,7 +29,7 @@ class Message extends React.Component {
     //   .then(json => {
     //     console.log(json);
     //   });
-    console.log(block);
+    // console.log(block);
   }
 
   dislikeMessage(block) {
@@ -44,13 +44,13 @@ class Message extends React.Component {
     //   .then(json => {
     //     console.log(json);
     //   });
-    console.log(block);
+    // console.log(block);
   }
 
   render() {
     return (
       <div className="Message">
-        <ListItem alignItems="flex-start">
+        <ListItem key={this.props.index} alignItems="flex-start">
             <ListItemAvatar>
                 <Avatar style={{ color: 'white' }}/>
             </ListItemAvatar>

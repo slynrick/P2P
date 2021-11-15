@@ -15,33 +15,33 @@ class Messages extends React.Component {
   }
 
   readAllMessagesFromSelectedChain() {
-    if(this.props.chain.length <= 0)
-        return;
-    fetch('/freechains/chain/consensus/%23' + this.props.chain.replace("#", ""))
-        .then(response => response.json())
-        .then(json => {
-          console.log(json);
-        });
+    // if(this.props.chain.length <= 0)
+    //     return;
+    // fetch('/freechains/chain/consensus/%23' + this.props.chain.replace("#", ""))
+    //     .then(response => response.json())
+    //     .then(json => {
+    //       console.log(json);
+    //     });
   
   }
 
   readAllBlockedMessagesFromSelectedChain() {
-    if(this.props.chain.length <= 0)
-        return;
-    fetch('/freechains/chain/heads/%23' + this.props.chain.replace("#", "") + "/blocked")
-        .then(response => response.json())
-        .then(json => {
-          console.log(json);
-        });
+    // if(this.props.chain.length <= 0)
+    //     return;
+    // fetch('/freechains/chain/heads/%23' + this.props.chain.replace("#", "") + "/blocked")
+    //     .then(response => response.json())
+    //     .then(json => {
+    //       console.log(json);
+    //     });
   }
 
-  componentDidUpdate() {
-    if(this.props.selectedMode === "Messages") {
-        this.readAllMessagesFromSelectedChain();
-    } else if (this.props.selectedMode === "Blocked") {
-        this.readAllBlockedMessagesFromSelectedChain();
-    }
-  }
+  // componentDidUpdate() {
+  //   if(this.props.selectedMode === "Messages") {
+  //       this.readAllMessagesFromSelectedChain();
+  //   } else if (this.props.selectedMode === "Blocked") {
+  //       this.readAllBlockedMessagesFromSelectedChain();
+  //   }
+  // }
 
 
   render() {
@@ -49,7 +49,7 @@ class Messages extends React.Component {
     <List className="Messages">
         {this.state.messages.map((text, index) => (
             <div>
-                <Message chain={this.props.chain} />
+                <Message key={index} chain={this.props.chain} />
                 <Divider/>
             </div> 
         ))}

@@ -20,6 +20,11 @@ import ListItemText from '@mui/material/ListItemText';
 import ChainIcon from '@material-ui/icons/LinkRounded';
 import AddIcon from '@material-ui/icons/Add';
 
+import OutlinedInput from '@mui/material/OutlinedInput';
+import InputLabel from '@mui/material/InputLabel';
+import InputAdornment from '@mui/material/InputAdornment';
+import FormControl from '@mui/material/FormControl';
+
 const drawerWidth = 240;
 
 const AppBar = styled(MuiAppBar, {
@@ -49,7 +54,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 }));
 
 export default function NavBar(props) {
-  const addChain = props.addChain;
+  const [newChainName, setnewChainName] = React.useState(false);
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const [selectedIndex, setSelectedIndex] = React.useState(true);
@@ -65,6 +70,16 @@ export default function NavBar(props) {
   const handleDrawerClose = () => {
     setOpen(false);
   };
+
+  const handleNewChainChange = (event) => {
+    setnewChainName(event.target.value);
+  };
+
+  const handleNewChainSubmit = () => {
+    console.log(newChainName);
+    // if (newChainName === "") return;
+    // props.addChain(newChainName);
+  }
 
   return (
     <Box sx={{ display: 'flex' }} >
@@ -106,14 +121,26 @@ export default function NavBar(props) {
         </DrawerHeader>
         <Divider />
         <List>
-          {['Join a chain'].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>
-                <AddIcon style={{ color: 'white' }}/>
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
+          <ListItem>
+            <FormControl variant="outlined"  >
+              <InputLabel style={{ color: 'white' }}>New</InputLabel>
+              <OutlinedInput style={{ color: 'white' }}
+                id="outlined-adornment-chain"
+                  onChange={handleNewChainChange}
+                endAdornment={
+                  
+                  <InputAdornment position="end">
+                    <IconButton
+                         onClick={handleNewChainSubmit}
+                      >
+                      <AddIcon style={{ color: 'white' }}/>
+                    </IconButton>
+                  </InputAdornment>
+                }
+                label="Add"
+              />
+            </FormControl>
+          </ListItem>
         </List>
         <Divider />
         <List>

@@ -77,8 +77,8 @@ export default function NavBar(props) {
 
   const handleNewChainSubmit = () => {
     console.log(newChainName);
-    // if (newChainName === "") return;
-    // props.addChain(newChainName);
+    if (newChainName === "") return;
+    props.addChain(newChainName);
   }
 
   return (

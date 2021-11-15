@@ -7,6 +7,8 @@ import SendIcon from '@material-ui/icons/SendRounded';
 import AttIcon from '@material-ui/icons/AttachFileRounded';
 import { withStyles } from "@material-ui/core/styles";
 import Messages from './Messages'
+// import Input from '@mui/material/Input';
+import { styled } from '@mui/material/styles';
 
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
@@ -14,23 +16,32 @@ import ChatIcon from '@material-ui/icons/ChatRounded';
 import BlockedIcon from '@material-ui/icons/BlockRounded';
 import GenerateIcon from '@material-ui/icons/CreateRounded';
 import UpdateIcon from '@material-ui/icons/SyncRounded';
+import PhotoCamera from '@material-ui/icons/PhotoCamera';
 
 const styles = {
     input: {
       color: "white"
 
     }
-  };
+};
+
+const Input = styled('input')({
+  display: 'none',
+});
 
 class Chat extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {remoteAddress: ""};
+    this.state = {remoteAddress: "", message: "", image: ""};
 
     this.syncChain = this.syncChain.bind(this);
     this.generateKeys = this.generateKeys.bind(this);
     this.handlePvtKeyChange = this.handlePvtKeyChange.bind(this);
     this.handlePubKeyChange = this.handlePubKeyChange.bind(this);
+    this.convertBase64 = this.convertBase64.bind(this);
+    this.handleFileRead = this.handleFileRead.bind(this);
+    this.handleMessageChange = this.handleMessageChange.bind(this);
+    this.sendMessage = this.sendMessage.bind(this);
   }
 
   syncChain() {
@@ -49,7 +60,6 @@ class Chat extends React.Component {
   }
 
   generateKeys() {
-    console.log("keys");
     var crypto = require("crypto");
     var id = crypto.randomBytes(32).toString('hex');
     fetch('/freechains/crypto/pubpvt', {
@@ -62,7 +72,6 @@ class Chat extends React.Component {
     }).then(response => response.json())
       .then(json => {
         var keys = json['data'].split(" ");
-        console.log(keys);
         this.props.handlePubKeyChange(keys[0]);
         this.props.handlePvtKeyChange(keys[1]);
       });
@@ -75,6 +84,51 @@ class Chat extends React.Component {
   handlePubKeyChange = (event) => {
     this.props.handlePubKeyChange(event.target.value);
   };
+
+  convertBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const fileReader = new FileReader();
+      fileReader.readAsDataURL(file)
+      fileReader.onload = () => {
+        resolve(fileReader.result);
+      }
+      fileReader.onerror = (error) => {
+        reject(error);
+      }
+    })
+  }
+
+  handleFileRead = async (event) => {
+    const file = event.target.files[0];
+    const base64 = await this.convertBase64(file);
+    this.setState({image: base64});
+  }
+
+  handleMessageChange = async (event) => {
+    this.setState({message: event.target.value});
+  }
+
+  sendMessage = () => {
+    if (this.state.image.length + this.state.message.length > 127000) {
+      alert("Mensagem não pode exceder 127Kb");
+      return;
+    }
+    console.log(this.props.chain);
+    var message = JSON.stringify({"message": this.state.message, "image": this.state.image});
+    fetch('/freechains/chain/post/%23' + this.props.chain.replace("#", ""), {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      method: 'POST',
+      body: JSON.stringify({"payload": message, "sign": this.props.currentUser.pvtKey})
+    }).then(response => response.json())
+      .then(json => {
+        console.log(json);
+      });
+    
+    
+  }
 
   render() {
     const { classes } = this.props;
@@ -131,6 +185,7 @@ class Chat extends React.Component {
           className="send-chat"
           id="filled-multiline-flexible"
           label="Message"
+          onChange={this.handleMessageChange}
           multiline
           minRows={4}
           maxRows={4}
@@ -140,19 +195,14 @@ class Chat extends React.Component {
             className: classes.input,
             endAdornment: (
                 <InputAdornment position="end">
+                  <label htmlFor="icon-button-file">
+                    <Input accept="image/*" id="icon-button-file" type="file" onChange={e => this.handleFileRead(e)}/>
+                    <IconButton color="primary" aria-label="upload picture" component="span">
+                      <PhotoCamera style={{ color: 'white' }}/>
+                    </IconButton>
+                  </label>
                   <IconButton
-                    //aria-label="toggle password visibility"
-                    //onClick={handleClickShowPassword}
-                    //onMouseDown={handleMouseDownPassword}
-                    //edge="end"
-                  >
-                    <AttIcon style={{ color: 'white' }}/>
-                  </IconButton>
-                  <IconButton
-                    //aria-label="toggle password visibility"
-                    //onClick={handleClickShowPassword}
-                    //onMouseDown={handleMouseDownPassword}
-                    //edge="end"
+                    onClick={this.sendMessage}
                   >
                     <SendIcon style={{ color: 'white' }}/>
                   </IconButton>

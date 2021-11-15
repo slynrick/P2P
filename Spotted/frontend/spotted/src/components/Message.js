@@ -47,10 +47,14 @@ class Message extends React.Component {
     // console.log(block);
   }
 
+  componentDidMount() {
+    
+  }
+
   render() {
     return (
       <div className="Message">
-        <ListItem key={this.props.index} alignItems="flex-start">
+        <ListItem key={this.props.blockHash} alignItems="flex-start">
             <ListItemAvatar>
                 <Avatar style={{ color: 'white' }}/>
             </ListItemAvatar>
@@ -63,7 +67,7 @@ class Message extends React.Component {
                         variant="body2"
                         color="white"
                     >
-                        Ali Connors
+                        {this.props.blockHash}
                     <img src={`data:image/jpeg;base64,${this.state.image}`}  alt="img"></img>
                     </Typography>
                 }

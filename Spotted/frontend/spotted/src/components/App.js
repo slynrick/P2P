@@ -9,7 +9,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     // Não chame this.setState() aqui!
-    this.state = {chains:["oi"], selectedChain: "", selectedMode: "Messages", pubKey: "", pvtKey: ""};
+    this.state = {chains:[], selectedChain: "", selectedMode: "Messages", pubKey: "", pvtKey: ""};
 
     this.addChain = this.addChain.bind(this);
     this.selectChain = this.selectChain.bind(this);

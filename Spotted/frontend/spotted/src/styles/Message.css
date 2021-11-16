@@ -10,3 +10,8 @@
     color: white !important;
     font-size: x-small;
 }
+
+img {
+    max-width: 300px;
+    max-height: 200px;
+}

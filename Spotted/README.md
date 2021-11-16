@@ -44,6 +44,8 @@ Foram utilizados quase todas as funcionalidades do freechains, exceto:
  - Peer Chains: Não foi implementado busca de cadeias, até porque não conseguimos visualizar as chaves publicas das cadeias de outros peers para entrar.
  - Host Now: para a aplicação não é necessário usar a rota para mudar o tempo atual, muito útil para a simulação
 
+Quanto à logica de funcionamento do freechains, usamos sua forma de consenso para realizar o merge das cadeias e garantir a reputação correta para cada post e usuário. De forma que seja impossível para o usuário burlar o sistema, como reputação infinita. Esse tipo de funcionalidade permite que a utilização de um sistema colaborativo P2P seja muito mais fluido do que o próprio usuário realizar o merge da cadeia localmente ou até mesmo ter um servidor centralizado para reputação, pois seria extremamente dificil garantir a contagem de reputação na aplicação de uma forma diferente da garantida pelo freechains com o consenso da cadeia de blocos.
+
 ## Funcionamento da aplicação
 
 ### Interação entre usuários

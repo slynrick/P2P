@@ -4,7 +4,7 @@ import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from "@material-ui/core/IconButton";
 import SendIcon from '@material-ui/icons/SendRounded';
-import AttIcon from '@material-ui/icons/AttachFileRounded';
+// import AttIcon from '@material-ui/icons/AttachFileRounded';
 import { withStyles } from "@material-ui/core/styles";
 import Messages from './Messages'
 // import Input from '@mui/material/Input';
@@ -113,7 +113,6 @@ class Chat extends React.Component {
       alert("Mensagem não pode exceder 127Kb");
       return;
     }
-    console.log(this.props.chain);
     var message = JSON.stringify({"message": this.state.message, "image": this.state.image});
     fetch('/freechains/chain/post/%23' + this.props.chain.replace("#", ""), {
       headers: {
@@ -125,7 +124,7 @@ class Chat extends React.Component {
     }).then(response => response.json())
       .then(json => {
         console.log(json);
-      });
+    });
     
     
   }
@@ -135,7 +134,7 @@ class Chat extends React.Component {
     return (
       <div className="Chat">
         <div className="text-chat">
-            <Messages chain={this.props.chain} selectedMode={this.props.selectedMode}/>
+            <Messages chain={this.props.chain} selectedMode={this.props.selectedMode} messages={this.props.messages} currentUser={this.props.currentUser} readMessages={this.props.readMessages}/>
         </div>
         <div className="conf-chat">
           <TextField 

@@ -50,7 +50,7 @@ Quanto à logica de funcionamento do freechains, usamos sua forma de consenso pa
 
 ### Interação entre usuários
 
-A ideia é os usuários interagirem através de postagem de mensagens que podem ter mensagem e uma imagem ou realizando replies (com like ou dislike) além dos likes e dislikes puros. Conforme o conteúdo da cadeia estiver conforme as regras, o pioneiro e depois a própria comunidade realiza likes para incentivar esse tipo de conteúdo, já os conteúdos fora da regra é deve ser preferencialmente dado dislike para que a mensagem caia na regra do freechains e evite que ela continue se expalhando pela rede.
+A ideia é os usuários interagirem através de postagem de mensagens que podem ter mensagem e uma imagem ou realizando replies (com like ou dislike) além dos likes e dislikes puros. Conforme o conteúdo da cadeia estiver conforme as regras, o pioneiro e depois a própria comunidade realiza likes para incentivar esse tipo de conteúdo, já os conteúdos fora da regra é deve ser preferencialmente dado dislike para que a mensagem caia na regra do freechains e evite que ela continue se espalhando pela rede.
 
 No sistema mostra mensagens bloqueadas que são de usuários novos ou de usuários sem reputação e estes devem seguir as mesma regras de conteúdo que das mensagens liberadas, com a diferença que uma mensagem bloqueada de conteúdo impróprio nunca aparecerá na cadeia principal.
 
@@ -63,10 +63,10 @@ O sistema de reputação vai guiar o percurso daquela cadeia na comunidade, segu
  - Toda sistema de reply é utilizando o sistema de like e deslike, sendo a própria mensagem o why
  - Uma mensagem com muitos likes é considerada viral e é facilmente identificada pelos badgets acima do ícone de coração em cada mensagem
  - Para saber qual mensagem é de like, basta procurar uma mensagem com o formato 'Liked hash'
- - Mensagens com muitos deslikes sçao removidos da cadeia pelo protocolo freechains
+ - Mensagens com muitos deslikes são removidos da cadeia pelo protocolo freechains
  - Mensagem com dislike do próprio usuário que mandou, é revogada
  - O usuário precisa ter ao menos 1 de reputação para postar uma mensagem na cadeia sem precisar que seja desbloqueado
- - O usuário pode ter atpe 30 reputações, então é desejável que utilize
+ - O usuário pode ter até 30 reputações, então é desejável que utilize
  - Para saber a quantidade de reputação de um usuário, ou coloque a chave publica escrita no textedit ou coloque o mouse acima da imagem do usuário na mensagem.
  - Usuários com maior quantidade de reputação são considerados pessoas com conteúdos que seguem as regras
 

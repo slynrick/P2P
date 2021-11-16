@@ -16,7 +16,7 @@ class Messages extends React.Component {
     <List className="Messages">
         {this.props.messages.map((hash, index) => (
             <div key={index}>
-                <Message blockHash={hash} chain={this.props.chain} currentUser={this.props.currentUser} readMessages={this.props.readMessages}/>
+                <Message blockHash={hash} chain={this.props.chain} selectedMode={this.props.selectedMode} currentUser={this.props.currentUser} readMessages={this.props.readMessages}/>
                 <Divider/>
             </div> 
         ))}

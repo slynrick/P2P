@@ -56,7 +56,7 @@ O servidor é levantado no localhost porta 5000, única porta que é exposta de 
 | Rota | Parâmetros | Body | Descrição|
 |---|---|---|---|
 | /freechains/chains/join/`chain` | `chain`: Nome da cadeia URL encoded | {<br>`"shared"`: "XXXXX..."<br>} | Rota para engressar em uma nova cadeia|
-| /freechains/chains/join/leave/`chain` | `chain`: Nome da cadeia URL encoded |  | Rota para sair em uma nova cadeia|
+| /freechains/chains/leave/`chain` | `chain`: Nome da cadeia URL encoded |  | Rota para sair em uma nova cadeia|
 | /freechains/chains/list | | | Rota para listar as cadeias locais|
 | /freechains/chain/genesis/`chain` | `chain`: Nome da cadeia URL encoded |  | Rota para identificar o hash do bloco genesis|
 | /freechains/chain/get/`chain`/`mod`/`hash` | `chain`: Nome da cadeia URL encoded<br> `hash`:  Hash do bloco <br> `mod`: all ou linked ou blocked | {<br>`"decript"`: "XXXXX..."<br>} | Rota para pegar os dados de um bloco em uma cadeia|

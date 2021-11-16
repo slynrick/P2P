@@ -5,15 +5,11 @@ RUN apt update && apt install -y \
 RUN curl -fsSL https://deb.nodesource.com/setup_lts.x | bash - && \
     apt-get install -y nodejs && \
     npm install -g yarn 
-    #&& \
-    #npx browserslist@latest --update-db
 
 WORKDIR /spotted
 
-#COPY src .
-#COPY start.sh .
+COPY spotted .
 
 EXPOSE 8080
 
-# CMD sleep infinity
-CMD /freechains/start.sh
+CMD /freechains/start.sh & sleep 30 && yarn install && yarn start

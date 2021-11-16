@@ -19,13 +19,14 @@ class Message extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {first: true, message: "", image: "", reps: 0, like: false, backs: "", time: -1, signed: ""}
+    this.state = {first: true, message: "", image: "", userReps: 0, reps: 0, like: false, backs: "", time: -1, signed: ""}
 
     this.likeMessage = this.likeMessage.bind(this);
     this.dislikeMessage = this.dislikeMessage.bind(this);
     this.getBlockInfo = this.getBlockInfo.bind(this);
     this.getPayloadInfo = this.getPayloadInfo.bind(this);
     this.getRepsInfo = this.getRepsInfo.bind(this);
+    this.getUserRepsInfo = this.getUserRepsInfo.bind(this);
   }
 
   likeMessage() {
@@ -38,7 +39,7 @@ class Message extends React.Component {
       body: JSON.stringify({sign: this.props.currentUser.pvtKey})
     }).then(response => response.json())
       .then(json => {
-        this.props.readMessages(this.props.chain);
+        this.props.readMessages(this.props.chain, this.props.selectedMode);
       });
   }
 
@@ -52,7 +53,7 @@ class Message extends React.Component {
       body: JSON.stringify({sign: this.props.currentUser.pvtKey})
     }).then(response => response.json())
       .then(json => {
-        this.props.readMessages(this.props.chain);
+        this.props.readMessages(this.props.chain, this.props.selectedMode);
       });
   }
 
@@ -71,6 +72,7 @@ class Message extends React.Component {
         var d = new Date(0);
         d.setUTCSeconds(secs);
         this.setState({like: json['data']['like'] == null ? "" : json['data']['like']['hash'] , backs: json['data']['backs'].join(" "), time: secs === "Origin" ? secs : d, signed: pub});
+        this.getUserRepsInfo();
     });
   }
 
@@ -84,7 +86,6 @@ class Message extends React.Component {
       body: JSON.stringify({decript: ""})
     }).then(response => response.json())
       .then(json => {
-        console.log(json);
         if (json['data'] !== "") {
           this.setState({message: json['data']['message'], image: json['data']['image']});
         } else {
@@ -103,6 +104,20 @@ class Message extends React.Component {
     }).then(response => response.json())
       .then(json => {
         this.setState({reps: parseInt(json['data'])});
+      });
+  }
+
+  getUserRepsInfo() {
+    if (this.state.signed === "Anon" || this.state.signed === "") return;
+    fetch('/freechains/chain/reps/%23' + this.props.chain.replace("#", "") + "/" + this.state.signed, {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      method: "GET"
+    }).then(response => response.json())
+      .then(json => {
+        this.setState({userReps: parseInt(json['data'])});
       });
   }
 
@@ -128,28 +143,23 @@ class Message extends React.Component {
       <div className="Message">
         <ListItem key={this.props.blockHash} alignItems="flex-start">
             <ListItemAvatar>
-              <Tooltip title={this.state.signed}>
+              <Tooltip title={this.state.signed + '   [' + this.state.userReps + ' reps]'}>
               <Avatar style={{ color: 'white' }}/>
               </Tooltip>
             </ListItemAvatar>
             <ListItemText className="MessageText"
                 primary={this.state.time + ' '  + this.props.blockHash}
                 secondary={
-                  <div>
-                    <Divider >
-                      <Chip label="Message" style={{ color: 'white' }}/>
-                    </Divider>
                     <Typography
                         sx={{display: 'inline' }}
                         component="span"
                         variant="body"
                         color="white"
                     >
-                    {this.state.like === "" ? this.state.message : 'Liked ' + this.state.like}
+                      {this.state.message === "" ? <div></div> : <div><Divider ><Chip label="Message" style={{ color: 'white' }}/></Divider></div> }
+                      {this.state.like === "" ? this.state.message : 'Liked ' + this.state.like}
+                      {this.state.image === "" ? <div></div> : <div><Divider ><Chip label="Image" style={{ color: 'white' }}/></Divider><img src={this.state.image}  alt="img"></img></div>}
                     </Typography>
-                    <br></br>
-                    {this.state.image === "" ? <div></div> : <img src={this.state.image}  alt="img"></img>}
-                  </div>
                 }
             />
             <IconButton>

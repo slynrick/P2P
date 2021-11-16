@@ -32,7 +32,7 @@ const Input = styled('input')({
 class Chat extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {remoteAddress: "", message: "", image: ""};
+    this.state = {remoteAddress: "", message: "", imageFile: "", image: ""};
 
     this.syncChain = this.syncChain.bind(this);
     this.generateKeys = this.generateKeys.bind(this);
@@ -101,7 +101,7 @@ class Chat extends React.Component {
   handleFileRead = async (event) => {
     const file = event.target.files[0];
     const base64 = await this.convertBase64(file);
-    this.setState({image: base64});
+    this.setState({imageFile: file.name, image: base64});
   }
 
   handleMessageChange = async (event) => {
@@ -123,7 +123,7 @@ class Chat extends React.Component {
       body: JSON.stringify({"payload": message, "sign": this.props.currentUser.pvtKey})
     }).then(response => response.json())
       .then(json => {
-        console.log(json);
+        this.props.readMessages(this.props.chain, this.props.selectedMode);
     });
     
     
@@ -140,7 +140,7 @@ class Chat extends React.Component {
           <TextField 
             className="pubpvt-key" 
             id="standard-basic1" 
-            label="PublicKey"  
+            label={"PublicKey [" + this.props.currentUser.reps + "]"}
             variant="filled" 
             value={this.props.currentUser.pubKey} 
             onChange={this.handlePubKeyChange}
@@ -183,7 +183,7 @@ class Chat extends React.Component {
         <TextField
           className="send-chat"
           id="filled-multiline-flexible"
-          label="Message"
+          label={this.state.imageFile !== "" ? "Message [img: " + this.state.imageFile + "]" : "Message"}
           onChange={this.handleMessageChange}
           multiline
           minRows={4}

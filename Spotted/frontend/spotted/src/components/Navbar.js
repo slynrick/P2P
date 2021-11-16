@@ -19,6 +19,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import ChainIcon from '@material-ui/icons/LinkRounded';
 import AddIcon from '@material-ui/icons/Add';
+import RemoveIcon from '@material-ui/icons/Remove';
 
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
@@ -54,10 +55,11 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 }));
 
 export default function NavBar(props) {
-  const [newChainName, setnewChainName] = React.useState(false);
+  const [newChainName, setnewChainName] = React.useState("");
+  const [removeChainName, setremoveChainName] = React.useState("");
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
-  const [selectedIndex, setSelectedIndex] = React.useState(true);
+  const [selectedIndex, setSelectedIndex] = React.useState();
 
   const handleListItemClick = (event, index) => {
     setSelectedIndex(index);
@@ -76,9 +78,17 @@ export default function NavBar(props) {
   };
 
   const handleNewChainSubmit = () => {
-    console.log(newChainName);
     if (newChainName === "") return;
     props.addChain(newChainName);
+  }
+
+  const handleRemoveChainChange = (event) => {
+    setremoveChainName(event.target.value);
+  };
+
+  const handleRemoveChainSubmit = () => {
+    if (removeChainName === "") return;
+    props.removeChain(removeChainName);
   }
 
   return (
@@ -141,13 +151,33 @@ export default function NavBar(props) {
               />
             </FormControl>
           </ListItem>
+          <ListItem>
+            <FormControl variant="outlined"  >
+              <InputLabel style={{ color: 'white' }}>Remove</InputLabel>
+              <OutlinedInput style={{ color: 'white' }}
+                id="outlined-adornment-chain"
+                  onChange={handleRemoveChainChange}
+                endAdornment={
+                  
+                  <InputAdornment position="end">
+                    <IconButton
+                         onClick={handleRemoveChainSubmit}
+                      >
+                      <RemoveIcon style={{ color: 'white' }}/>
+                    </IconButton>
+                  </InputAdornment>
+                }
+                label="Remove"
+              />
+            </FormControl>
+          </ListItem>
         </List>
         <Divider />
         <List>
           {props.chains.map((text, index) => (
             <ListItem button key={text}
-              selected={selectedIndex === index}
-              onClick={(event) => { handleListItemClick(event, index); props.selectChain(text); }}>
+                selected={selectedIndex === index}
+                onClick={(event) => { handleListItemClick(event, index); props.selectChain(text); }}>
               <ListItemIcon>
                 <ChainIcon style={{ color: 'white' }}/>
               </ListItemIcon>

@@ -41,20 +41,22 @@ class Chat extends React.Component {
     this.convertBase64 = this.convertBase64.bind(this);
     this.handleFileRead = this.handleFileRead.bind(this);
     this.handleMessageChange = this.handleMessageChange.bind(this);
+    this.handleRemoteAddressChange = this.handleRemoteAddressChange.bind(this);
     this.sendMessage = this.sendMessage.bind(this);
   }
 
   syncChain() {
     if (this.state.remoteAddress === "")
       return;
-    fetch('/freechains/peer/recv/' +  this.state.remoteAddress + '/%23' + this.props.chain)
+    fetch('/freechains/peer/recv/' +  this.state.remoteAddress + '/%23' + this.props.chain.replace("#", ""))
       .then(response => response.json())
       .then(json_recv => {
         console.log(json_recv);
-        fetch('/freechains/peer/send/' +  this.state.remoteAddress + '/%23' + this.props.chain)
+        fetch('/freechains/peer/send/' +  this.state.remoteAddress + '/%23' + this.props.chain.replace("#", ""))
           .then(response => response.json())
           .then(json_send => {
             console.log(json_send);
+            this.props.readMessages(this.props.chain, this.props.selectedMode);
         });
     });
   }
@@ -106,6 +108,10 @@ class Chat extends React.Component {
 
   handleMessageChange = async (event) => {
     this.setState({message: event.target.value});
+  }
+
+  handleRemoteAddressChange = async (event) => {
+    this.setState({remoteAddress: event.target.value});
   }
 
   sendMessage = () => {
@@ -172,8 +178,13 @@ class Chat extends React.Component {
             className="remote-address" 
             id="standard-basic3" 
             label="Remote"     
-            variant="filled" 
-            InputLabelProps={{style : {color : 'white'} }}/>
+            variant="filled"
+            value={this.state.remoteAddress} 
+            onChange={this.handleRemoteAddressChange}
+            InputLabelProps={{style : {color : 'white'} }}
+            InputProps={{
+            className: classes.input
+            }}/>
           <IconButton
             onClick={this.syncChain}
           >

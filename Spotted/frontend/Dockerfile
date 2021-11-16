@@ -10,6 +10,8 @@ WORKDIR /spotted
 
 COPY spotted .
 
+RUN yarn install
+
 EXPOSE 8080
 
-CMD /freechains/start.sh & sleep 30 && yarn install && yarn start
+CMD /freechains/start.sh & sleep 5 && yarn start
